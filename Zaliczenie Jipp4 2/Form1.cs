@@ -15,45 +15,58 @@ namespace Zaliczenie_Jipp4_2
         public Form1() //aplikacja SDI single document interface - wyklad 4
         {
             InitializeComponent();
-
+            SetTimer();
         }
-
-        private void groupBoxOkrag_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void groupBoxProstokat_Paint(object sender, PaintEventArgs e)
-        {
-            int centerX = (groupBoxProstokat.Left + groupBoxProstokat.Right) / 2;
-            int centerY = (groupBoxProstokat.Top + groupBoxProstokat.Height) / 2;
-            int radius = groupBoxProstokat.Width / 2;
-
-            e.Graphics.DrawEllipse(Pens.Red, centerX - radius, centerY - radius,
-                      radius + radius, radius + radius);
-        }
-
+        int x = 2;
         private void buttonOkrag_Click(object sender, EventArgs e)
         {
             Graphics g = groupBoxOkrag.CreateGraphics();
-            int centerX = 40; //(groupBoxProstokat.Left + groupBoxProstokat.Right) / 2;
-            int centerY = 40; //(groupBoxProstokat.Top + groupBoxProstokat.Height) / 2;
-            int radius = groupBoxOkrag.Width / 32;
+            int centerX =  groupBoxOkrag.Width / x;
+            int centerY = groupBoxOkrag.Height / x;
+            int radius = groupBoxOkrag.Width / x;
+            x++; //dodac to do timera
             g.DrawEllipse(Pens.Red, centerX - radius, centerY - radius,
                       radius + radius, radius + radius);
-
         }
-
+        int doprostokata = 10;
         private void buttonProstokat_Click(object sender, EventArgs e)
         {
             Graphics g = groupBoxProstokat.CreateGraphics();
-            g.DrawRectangle(Pens.SeaGreen, 10, 10, 50, 50);
+            int topLeftX = groupBoxProstokat.Width / 20;
+            int topLeftY = groupBoxProstokat.Height / 20;
+            int height = (int)(groupBoxProstokat.Height * (0.9));
+            int width = (int)(groupBoxProstokat.Width* (0.9));
+            g.TranslateTransform(groupBoxProsta.Width / 2, groupBoxProsta.Height / 2);
+            g.RotateTransform(doprostokata);
+            doprostokata += 20;
+            //g.RotateTransform(100);
+            g.DrawRectangle(Pens.SeaGreen, topLeftX, topLeftY, width,height );
         }
-
+        int doprostej = 10;
         private void buttonProsta_Click(object sender, EventArgs e)
         {
             Graphics g = groupBoxProsta.CreateGraphics();
-            g.DrawLines(Pens.SeaGreen, new Point[] { new Point(10, 10), new Point(20, 20) });
+            Point firstPoint = new Point(groupBoxProsta.Width / 20, groupBoxProsta.Height / 20);
+            Point secondPoint = new Point(groupBoxProsta.Width, groupBoxProsta.Height);
+            g.TranslateTransform(groupBoxProsta.Width / 2, groupBoxProsta.Height / 2);
+            g.RotateTransform(doprostej);
+            doprostej += 20;
+            //g.RotateTransform(100);
+            g.DrawLines(Pens.SeaGreen, new Point[] { firstPoint, secondPoint });
+            
         }
+        private static System.Timers.Timer aTimer;
+        private void SetTimer()
+        {
+            // Create a timer with a two second interval.
+            aTimer = new System.Timers.Timer(1000);
+            // Hook up the Elapsed event for the timer. 
+            aTimer.Elapsed += buttonOkrag_Click;
+            aTimer.Elapsed += buttonProstokat_Click;
+            aTimer.Elapsed += buttonProsta_Click;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+        }
+
     }
 }
