@@ -15,7 +15,7 @@ namespace Zaliczenie_Jipp4_2
         public Form1() //aplikacja SDI single document interface - wyklad 4
         {
             InitializeComponent();
-            SetTimer();
+
         }
         int x = 2;
         private void buttonOkrag_Click(object sender, EventArgs e)
@@ -24,7 +24,7 @@ namespace Zaliczenie_Jipp4_2
             int centerX =  groupBoxOkrag.Width / x;
             int centerY = groupBoxOkrag.Height / x;
             int radius = groupBoxOkrag.Width / x;
-            x++; //dodac to do timera
+            x++;
             g.DrawEllipse(Pens.Red, centerX - radius, centerY - radius,
                       radius + radius, radius + radius);
         }
@@ -39,7 +39,6 @@ namespace Zaliczenie_Jipp4_2
             g.TranslateTransform(groupBoxProsta.Width / 2, groupBoxProsta.Height / 2);
             g.RotateTransform(doprostokata);
             doprostokata += 20;
-            //g.RotateTransform(100);
             g.DrawRectangle(Pens.SeaGreen, topLeftX, topLeftY, width,height );
         }
         int doprostej = 10;
@@ -51,16 +50,15 @@ namespace Zaliczenie_Jipp4_2
             g.TranslateTransform(groupBoxProsta.Width / 2, groupBoxProsta.Height / 2);
             g.RotateTransform(doprostej);
             doprostej += 20;
-            //g.RotateTransform(100);
             g.DrawLines(Pens.SeaGreen, new Point[] { firstPoint, secondPoint });
             
         }
         private static System.Timers.Timer aTimer;
+
+
         private void SetTimer()
         {
-            // Create a timer with a two second interval.
             aTimer = new System.Timers.Timer(1000);
-            // Hook up the Elapsed event for the timer. 
             aTimer.Elapsed += buttonOkrag_Click;
             aTimer.Elapsed += buttonProstokat_Click;
             aTimer.Elapsed += buttonProsta_Click;
@@ -68,5 +66,27 @@ namespace Zaliczenie_Jipp4_2
             aTimer.Enabled = true;
         }
 
+        private async Task StopTimer()
+        {
+            await Task.Delay(TimeSpan.FromSeconds(5));
+            aTimer.Stop();
+        }
+
+        private async void buttonUruchomAnimacje_Click(object sender, EventArgs e)
+        {
+            Form1 noweOkno = new Form1();
+            noweOkno.Show();
+            noweOkno.SetTimer();
+            await StopTimer();
+            MessageBox.Show("Animacja zakonczona");
+        }
+
+        private void buttonAnimacjaCalyCzas_Click(object sender, EventArgs e)
+        {
+            Form1 noweOkno = new Form1();
+            noweOkno.Show();
+            noweOkno.SetTimer();
+            //tutaj timer nigdy sie nie zatrzymuje
+        }
     }
 }
